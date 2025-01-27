@@ -1,6 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <!-- Cabeçalho -->
+    <q-header elevated class="bg-black">
       <q-toolbar>
         <q-btn
           flat
@@ -12,85 +13,86 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          <img :src=aviao alt="Logo" class="logo" />
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn flat round dense icon="account_circle" class="q-mr-sm" />
+        <q-btn flat round dense icon="notifications" />
       </q-toolbar>
     </q-header>
 
+    <!-- Menu Lateral -->
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
+      class="bg-grey-2"
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
+      <q-list padding>
+        <q-item-label header class="text-weight-bold text-primary">
+          Menu de Viagens
         </q-item-label>
 
         <EssentialLink
-          v-for="link in linksList"
+          v-for="link in travelLinks"
           :key="link.title"
           v-bind="link"
         />
       </q-list>
     </q-drawer>
 
+    <!-- Conteúdo da Página -->
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <!-- Rodapé -->
+    <q-footer elevated class="bg-grey-8 text-white">
+      <q-toolbar>
+        <q-toolbar-title class="text-center">
+          © Gestao Viagens
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import aviao from 'src/assets/aviao.png'
 
-const linksList = [
+// Links do menu lateral
+const travelLinks = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'Início',
+    caption: 'Página inicial',
+    icon: 'home',
+    link: '/'
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: 'Reservas',
+    caption: 'Minhas reservas',
+    icon: 'flight_takeoff',
+    link: '/reservas'
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    title: 'Destinos',
+    caption: 'Explore destinos',
+    icon: 'map',
+    link: '/destinos'
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    title: 'Perfil',
+    caption: 'Meu perfil',
+    icon: 'account_circle',
+    link: '/perfil'
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    title: 'Ajuda',
+    caption: 'Suporte e ajuda',
+    icon: 'help',
+    link: '/ajuda'
   }
 ]
 
@@ -100,3 +102,9 @@ function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>
+
+<style scoped>
+.logo {
+  height: 40px;
+}
+</style>
