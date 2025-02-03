@@ -58,6 +58,11 @@ import newyork from 'src/assets/newyork.jpg'
 import paris from 'src/assets/paris.jpg'
 
 export default {
+  methods: {
+    navigateTo (routeName) {
+      this.$router.push({ name: routeName })
+    },
+  },
   setup() {
     // Dados de destinos populares
     const popularDestinations = ref([

@@ -3,9 +3,11 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/HomePage.vue') }
+      { path: '/', name: 'home', component: () => import('pages/HomePage.vue') },
+      { path: '/reservas', name: '/reservas', component: () => import('pages/ReservasPage.vue') },
     ]
   },
+  { path: '/cad', name: 'cad', component: () => import('pages/CadCliente.vue') },
 
   // Always leave this as last one,
   // but you can also remove it
