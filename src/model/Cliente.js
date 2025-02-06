@@ -8,3 +8,5 @@ class Cliente {
         this.reservas = reservas
     }
 }
+
+export default Cliente

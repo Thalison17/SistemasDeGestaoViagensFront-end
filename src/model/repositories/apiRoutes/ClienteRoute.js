@@ -1,7 +1,7 @@
 class ClienteRoutes {
     constructor(config) {
         this.config = config;
-        this.name = 'cliente'
+        this.name = 'api/cliente'
     }
 
     get entity() {

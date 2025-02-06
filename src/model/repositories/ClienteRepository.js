@@ -1,21 +1,20 @@
-import api from 'src/services/api.js'
-import { Cliente } from '../Cliente'
+import api from 'src/services/api'
+import Cliente from 'src/model/Cliente'
 import ClienteRoutes from './apiRoutes/ClienteRoute'
-
 
 export default class ClienteRepository {
     constructor() {
       this.apiClient = api;
     }
-  
+
     createBaseRoute() {
       return new ClienteRoutes({}).entity;
     }
-    
+
     createDeleteRoute(id) {
       return new ClienteRoutes({ id }).delete;
     }
-  
+
     async fetchAllCliente() {
       try {
         const baseRoute = this.createBaseRoute();
@@ -26,7 +25,7 @@ export default class ClienteRepository {
         return [];
       }
     }
-  
+
     async createCliente(form) {
       try {
         const baseRoute = this.createBaseRoute();
@@ -37,7 +36,7 @@ export default class ClienteRepository {
         return [];
       }
     }
-  
+
     async updateCliente(Id, form) {
       try {
         const baseRoute = this.createBaseRoute();
@@ -49,7 +48,7 @@ export default class ClienteRepository {
         return [];
       }
     }
-  
+
     async deleteCliente(Id) {
       try {
         const deleteRoute = this.createDeleteRoute(Id);

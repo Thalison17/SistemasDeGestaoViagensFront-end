@@ -73,18 +73,19 @@ export class GenericStore {
         deleteItemLocally(id) {
           this.items = this.items.filter((item) => item.Id !== id);
         },
-      
+
         async deleteItem(Id) {
           this.loading = true;
           try {
             this.items = this.items.filter((item) => item.Id !== Id);
             await controller.delete(Id);
             await this.fetch('');
+            // eslint-disable-next-line no-unused-vars
           } catch (error) {
             this.loading = false;
           }
         },
-        
+
         async filter(route) {
           this.loading = true;
           if (!this.useMock || !this.mockFunction) {

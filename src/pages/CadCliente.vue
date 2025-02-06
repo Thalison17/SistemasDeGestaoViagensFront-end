@@ -95,85 +95,96 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
-import ClienteService from 'src/services/clienteService'
+import { ref } from 'vue';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+import { useClienteStore } from '../controller/store/ClienteStore'; // Ajuste o caminho se necessário
+import Cliente from '../model/Cliente';
 
 export default {
   setup() {
-    const $q = useQuasar()
-    const router = useRouter()
-    const loading = ref(false)
+    const $q = useQuasar();
+    const router = useRouter();
+    const loading = ref(false);
+    const clienteStore = useClienteStore(); // Chame a função para obter a store
 
     const formData = ref({
       nome: '',
       email: '',
       telefone: '',
       cpf: ''
-    })
+    });
 
     // Validação de email
     const isValidEmail = (val) => {
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-      return emailPattern.test(val)
-    }
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      return emailPattern.test(val);
+    };
 
     // Validação de CPF
     const isValidCPF = (cpf) => {
-      cpf = cpf.replace(/[^\d]+/g, '')
-      if (cpf.length !== 11) return false
+      cpf = cpf.replace(/[^\d]+/g, '');
+      if (cpf.length !== 11) return false;
 
       // Elimina CPFs inválidos conhecidos
-      if (/^(\d)\1{10}$/.test(cpf)) return false
+      if (/^(\d)\1{10}$/.test(cpf)) return false;
 
       // Valida 1o dígito
-      let add = 0
+      let add = 0;
       for (let i = 0; i < 9; i++) {
-        add += parseInt(cpf.charAt(i)) * (10 - i)
+        add += parseInt(cpf.charAt(i)) * (10 - i);
       }
-      let rev = 11 - (add % 11)
-      if (rev === 10 || rev === 11) rev = 0
-      if (rev !== parseInt(cpf.charAt(9))) return false
+      let rev = 11 - (add % 11);
+      if (rev === 10 || rev === 11) rev = 0;
+      if (rev !== parseInt(cpf.charAt(9))) return false;
 
       // Valida 2o dígito
-      add = 0
+      add = 0;
       for (let i = 0; i < 10; i++) {
-        add += parseInt(cpf.charAt(i)) * (11 - i)
+        add += parseInt(cpf.charAt(i)) * (11 - i);
       }
-      rev = 11 - (add % 11)
-      if (rev === 10 || rev === 11) rev = 0
-      if (rev !== parseInt(cpf.charAt(10))) return false
+      rev = 11 - (add % 11);
+      if (rev === 10 || rev === 11) rev = 0;
+      if (rev !== parseInt(cpf.charAt(10))) return false;
 
-      return true
-    }
+      return true;
+    };
 
     const onSubmit = async () => {
       try {
-        loading.value = true
+        loading.value = true;
 
-        // Chama o serviço para criar o cliente
-        await ClienteService.criarCliente(formData.value)
+        // Cria uma nova instância de Cliente com os dados do formulário
+        const novoCliente = new Cliente(
+          null, // clienteId será gerado pelo backend
+          formData.value.nome,
+          formData.value.email,
+          formData.value.telefone,
+          formData.value.cpf
+        );
+
+        // Usa o store para salvar o cliente
+        await clienteStore.save(novoCliente);
 
         // Mostra mensagem de sucesso
         $q.notify({
           type: 'positive',
           message: 'Cliente cadastrado com sucesso!'
-        })
+        });
 
         // Redireciona para a página apropriada
-        router.push('/')
+        router.push('/');
 
       } catch (error) {
         // Trata os erros
         $q.notify({
           type: 'negative',
           message: error.message || 'Erro ao cadastrar cliente'
-        })
+        });
       } finally {
-        loading.value = false
+        loading.value = false;
       }
-    }
+    };
 
     const resetForm = () => {
       formData.value = {
@@ -181,8 +192,8 @@ export default {
         email: '',
         telefone: '',
         cpf: ''
-      }
-    }
+      };
+    };
 
     return {
       formData,
@@ -191,9 +202,9 @@ export default {
       resetForm,
       isValidEmail,
       isValidCPF
-    }
+    };
   }
-}
+};
 </script>
 
 <style scoped>
