@@ -5,7 +5,7 @@ const routes = [
     children: [
       { path: '/', name: 'home', component: () => import('pages/HomePage.vue') },
       { path: '/reservas', name: '/reservas', component: () => import('pages/ReservasPage.vue') },
-    ]
+    ],
   },
   { path: '/cad', name: 'cad', component: () => import('pages/CadCliente.vue') },
 
@@ -13,8 +13,8 @@ const routes = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
-  }
+    component: () => import('pages/ErrorNotFound.vue'),
+  },
 ]
 
 export default routes

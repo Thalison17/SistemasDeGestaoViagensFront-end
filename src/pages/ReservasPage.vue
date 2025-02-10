@@ -22,22 +22,10 @@
         </q-input>
       </div>
       <div class="col-12 col-md-4">
-        <q-select
-          v-model="statusFilter"
-          :options="statusOptions"
-          outlined
-          dense
-          label="Status"
-        />
+        <q-select v-model="statusFilter" :options="statusOptions" outlined dense label="Status" />
       </div>
       <div class="col-12 col-md-4">
-        <q-select
-          v-model="dateFilter"
-          :options="dateOptions"
-          outlined
-          dense
-          label="Período"
-        />
+        <q-select v-model="dateFilter" :options="dateOptions" outlined dense label="Período" />
       </div>
     </div>
 
@@ -51,11 +39,7 @@
               <div class="col-12 col-md-4">
                 <div class="text-h6">{{ reserva.destino }}</div>
                 <div class="text-subtitle2">Reserva #{{ reserva.numero }}</div>
-                <q-chip
-                  :color="getStatusColor(reserva.status)"
-                  text-color="white"
-                  size="sm"
-                >
+                <q-chip :color="getStatusColor(reserva.status)" text-color="white" size="sm">
                   {{ reserva.status }}
                 </q-chip>
               </div>
@@ -157,13 +141,13 @@ export default {
 
     // Filtragem das reservas
     const filteredReservas = computed(() => {
-      return reservas.value.filter(reserva => {
-        const matchSearch = search.value === '' ||
+      return reservas.value.filter((reserva) => {
+        const matchSearch =
+          search.value === '' ||
           reserva.destino.toLowerCase().includes(search.value.toLowerCase()) ||
           reserva.numero.toLowerCase().includes(search.value.toLowerCase())
 
-        const matchStatus = statusFilter.value === 'Todos' ||
-          reserva.status === statusFilter.value
+        const matchStatus = statusFilter.value === 'Todos' || reserva.status === statusFilter.value
 
         return matchSearch && matchStatus
       })
@@ -176,15 +160,15 @@ export default {
         month: '2-digit',
         year: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       })
     }
 
     const getStatusColor = (status) => {
       const colors = {
-        'Confirmada': 'positive',
-        'Pendente': 'warning',
-        'Cancelada': 'negative'
+        Confirmada: 'positive',
+        Pendente: 'warning',
+        Cancelada: 'negative',
       }
       return colors[status] || 'grey'
     }
@@ -200,17 +184,17 @@ export default {
         title: 'Confirmar cancelamento',
         message: 'Tem certeza que deseja cancelar esta reserva?',
         cancel: true,
-        persistent: true
+        persistent: true,
       }).onOk(() => {
         // Implementar lógica de cancelamento
-        const reserva = reservas.value.find(r => r.id === id)
+        const reserva = reservas.value.find((r) => r.id === id)
         if (reserva) {
           reserva.status = 'Cancelada'
         }
         $q.notify({
           color: 'negative',
           message: 'Reserva cancelada com sucesso',
-          icon: 'close'
+          icon: 'close',
         })
       })
     }
@@ -225,9 +209,9 @@ export default {
       formatTime,
       getStatusColor,
       verDetalhes,
-      cancelarReserva
+      cancelarReserva,
     }
-  }
+  },
 }
 </script>
 

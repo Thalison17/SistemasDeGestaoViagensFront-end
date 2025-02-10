@@ -50,7 +50,6 @@
 import { ref } from 'vue'
 import aviao from 'src/assets/aviao.png'
 
-
 // Links do menu lateral
 const travelLinks = [
   {
@@ -83,7 +82,7 @@ const travelLinks = [
     icon: 'help',
     to: '/ajuda', // Navega para a rota '/ajuda'
   },
-];
+]
 
 const leftDrawerOpen = ref(false)
 

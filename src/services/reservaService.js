@@ -1,17 +1,18 @@
 import axios from 'axios'
 
-class ClienteService {
+class ReservaService {
   constructor() {
-    this.baseUrl = 'https://localhost:7068/api/Cliente'
+    this.baseUrl = 'https://localhost:7068/api/Reserva'
   }
 
-  async criarCliente(cliente) {
+  async criarReserva(reserva) {
     try {
       const response = await axios.post(this.baseUrl, {
-        nome: cliente.nome,
-        email: cliente.email,
-        telefone: cliente.telefone.replace(/\D/g, ''),
-        cpf: cliente.cpf.replace(/\D/g, ''),
+        clienteId: reserva.clienteId,
+        viagemId: reserva.viagemId,
+        dataReserva: reserva.dataReserva,
+        metodoPagamento: reserva.metodoPagamento,
+        custoTotal: reserva.custoTotal,
       })
       return response.data
     } catch (error) {
@@ -19,7 +20,7 @@ class ClienteService {
     }
   }
 
-  async obterTodosClientes() {
+  async obterTodasReservas() {
     try {
       const response = await axios.get(this.baseUrl)
       return response.data
@@ -28,7 +29,7 @@ class ClienteService {
     }
   }
 
-  async obterClientePorId(id) {
+  async obterReservaPorId(id) {
     try {
       const response = await axios.get(`${this.baseUrl}/${id}`)
       return response.data
@@ -37,20 +38,21 @@ class ClienteService {
     }
   }
 
-  async atualizarCliente(id, cliente) {
+  async atualizarReserva(id, reserva) {
     try {
       await axios.put(`${this.baseUrl}/${id}`, {
-        nome: cliente.nome,
-        email: cliente.email,
-        telefone: cliente.telefone.replace(/\D/g, ''),
-        cpf: cliente.cpf.replace(/\D/g, ''),
+        clienteId: reserva.clienteId,
+        viagemId: reserva.viagemId,
+        dataReserva: reserva.dataReserva,
+        metodoPagamento: reserva.metodoPagamento,
+        custoTotal: reserva.custoTotal,
       })
     } catch (error) {
       this.handleError(error)
     }
   }
 
-  async excluirCliente(id) {
+  async excluirReserva(id) {
     try {
       await axios.delete(`${this.baseUrl}/${id}`)
     } catch (error) {
@@ -67,4 +69,4 @@ class ClienteService {
   }
 }
 
-export default new ClienteService()
+export default new ReservaService()

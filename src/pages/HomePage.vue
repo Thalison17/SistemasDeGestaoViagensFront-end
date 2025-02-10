@@ -30,11 +30,7 @@
     <div>
       <h2 class="text-h4 text-weight-bold q-mb-md">Ofertas Especiais</h2>
       <div class="row q-col-gutter-md">
-        <div
-          v-for="offer in specialOffers"
-          :key="offer.title"
-          class="col-12 col-sm-6 col-md-4"
-        >
+        <div v-for="offer in specialOffers" :key="offer.title" class="col-12 col-sm-6 col-md-4">
           <q-card class="offer-card">
             <q-card-section>
               <div class="text-h6">{{ offer.title }}</div>
@@ -59,7 +55,7 @@ import paris from 'src/assets/paris.jpg'
 
 export default {
   methods: {
-    navigateTo (routeName) {
+    navigateTo(routeName) {
       this.$router.push({ name: routeName })
     },
   },

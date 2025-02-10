@@ -15,8 +15,8 @@
               v-model="formData.nome"
               label="Nome completo *"
               :rules="[
-                val => !!val || 'Nome é obrigatório',
-                val => val.length >= 3 || 'Nome deve ter no mínimo 3 caracteres'
+                (val) => !!val || 'Nome é obrigatório',
+                (val) => val.length >= 3 || 'Nome deve ter no mínimo 3 caracteres',
               ]"
               lazy-rules
               outlined
@@ -28,8 +28,8 @@
               label="Email *"
               type="email"
               :rules="[
-                val => !!val || 'Email é obrigatório',
-                val => isValidEmail(val) || 'Email inválido'
+                (val) => !!val || 'Email é obrigatório',
+                (val) => isValidEmail(val) || 'Email inválido',
               ]"
               lazy-rules
               outlined
@@ -41,8 +41,8 @@
               label="Telefone *"
               mask="(##) #####-####"
               :rules="[
-                val => !!val || 'Telefone é obrigatório',
-                val => val.length >= 14 || 'Telefone inválido'
+                (val) => !!val || 'Telefone é obrigatório',
+                (val) => val.length >= 14 || 'Telefone inválido',
               ]"
               lazy-rules
               outlined
@@ -58,8 +58,8 @@
               label="CPF *"
               mask="###.###.###-##"
               :rules="[
-                val => !!val || 'CPF é obrigatório',
-                val => isValidCPF(val) || 'CPF inválido'
+                (val) => !!val || 'CPF é obrigatório',
+                (val) => isValidCPF(val) || 'CPF inválido',
               ]"
               lazy-rules
               outlined
@@ -95,64 +95,64 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useQuasar } from 'quasar';
-import { useRouter } from 'vue-router';
-import { useClienteStore } from '../controller/store/ClienteStore'; // Ajuste o caminho se necessário
-import Cliente from '../model/Cliente';
+import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
+import { useClienteStore } from '../controller/store/ClienteStore' // Ajuste o caminho se necessário
+import Cliente from '../model/Cliente'
 
 export default {
   setup() {
-    const $q = useQuasar();
-    const router = useRouter();
-    const loading = ref(false);
-    const clienteStore = useClienteStore(); // Chame a função para obter a store
+    const $q = useQuasar()
+    const router = useRouter()
+    const loading = ref(false)
+    const clienteStore = useClienteStore() // Chame a função para obter a store
 
     const formData = ref({
       nome: '',
       email: '',
       telefone: '',
-      cpf: ''
-    });
+      cpf: '',
+    })
 
     // Validação de email
     const isValidEmail = (val) => {
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      return emailPattern.test(val);
-    };
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+      return emailPattern.test(val)
+    }
 
     // Validação de CPF
     const isValidCPF = (cpf) => {
-      cpf = cpf.replace(/[^\d]+/g, '');
-      if (cpf.length !== 11) return false;
+      cpf = cpf.replace(/[^\d]+/g, '')
+      if (cpf.length !== 11) return false
 
       // Elimina CPFs inválidos conhecidos
-      if (/^(\d)\1{10}$/.test(cpf)) return false;
+      if (/^(\d)\1{10}$/.test(cpf)) return false
 
       // Valida 1o dígito
-      let add = 0;
+      let add = 0
       for (let i = 0; i < 9; i++) {
-        add += parseInt(cpf.charAt(i)) * (10 - i);
+        add += parseInt(cpf.charAt(i)) * (10 - i)
       }
-      let rev = 11 - (add % 11);
-      if (rev === 10 || rev === 11) rev = 0;
-      if (rev !== parseInt(cpf.charAt(9))) return false;
+      let rev = 11 - (add % 11)
+      if (rev === 10 || rev === 11) rev = 0
+      if (rev !== parseInt(cpf.charAt(9))) return false
 
       // Valida 2o dígito
-      add = 0;
+      add = 0
       for (let i = 0; i < 10; i++) {
-        add += parseInt(cpf.charAt(i)) * (11 - i);
+        add += parseInt(cpf.charAt(i)) * (11 - i)
       }
-      rev = 11 - (add % 11);
-      if (rev === 10 || rev === 11) rev = 0;
-      if (rev !== parseInt(cpf.charAt(10))) return false;
+      rev = 11 - (add % 11)
+      if (rev === 10 || rev === 11) rev = 0
+      if (rev !== parseInt(cpf.charAt(10))) return false
 
-      return true;
-    };
+      return true
+    }
 
     const onSubmit = async () => {
       try {
-        loading.value = true;
+        loading.value = true
 
         // Cria uma nova instância de Cliente com os dados do formulário
         const novoCliente = new Cliente(
@@ -160,40 +160,39 @@ export default {
           formData.value.nome,
           formData.value.email,
           formData.value.telefone,
-          formData.value.cpf
-        );
+          formData.value.cpf,
+        )
 
         // Usa o store para salvar o cliente
-        await clienteStore.save(novoCliente);
+        await clienteStore.save(novoCliente)
 
         // Mostra mensagem de sucesso
         $q.notify({
           type: 'positive',
-          message: 'Cliente cadastrado com sucesso!'
-        });
+          message: 'Cliente cadastrado com sucesso!',
+        })
 
         // Redireciona para a página apropriada
-        router.push('/');
-
+        router.push('/')
       } catch (error) {
         // Trata os erros
         $q.notify({
           type: 'negative',
-          message: error.message || 'Erro ao cadastrar cliente'
-        });
+          message: error.message || 'Erro ao cadastrar cliente',
+        })
       } finally {
-        loading.value = false;
+        loading.value = false
       }
-    };
+    }
 
     const resetForm = () => {
       formData.value = {
         nome: '',
         email: '',
         telefone: '',
-        cpf: ''
-      };
-    };
+        cpf: '',
+      }
+    }
 
     return {
       formData,
@@ -201,10 +200,10 @@ export default {
       onSubmit,
       resetForm,
       isValidEmail,
-      isValidCPF
-    };
-  }
-};
+      isValidCPF,
+    }
+  },
+}
 </script>
 
 <style scoped>

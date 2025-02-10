@@ -1,7 +1,7 @@
-class ClienteRoutes {
+class ViagemRoutes {
   constructor(config) {
     this.config = config
-    this.name = 'api/cliente'
+    this.name = 'api/viagem'
   }
 
   get entity() {
@@ -13,4 +13,4 @@ class ClienteRoutes {
   }
 }
 
-export default ClienteRoutes
+export default ViagemRoutes

@@ -1,17 +1,16 @@
 import axios from 'axios'
 
-class ClienteService {
+class DestinoService {
   constructor() {
-    this.baseUrl = 'https://localhost:7068/api/Cliente'
+    this.baseUrl = 'https://localhost:7068/api/Destino'
   }
 
-  async criarCliente(cliente) {
+  async criarDestino(destino) {
     try {
       const response = await axios.post(this.baseUrl, {
-        nome: cliente.nome,
-        email: cliente.email,
-        telefone: cliente.telefone.replace(/\D/g, ''),
-        cpf: cliente.cpf.replace(/\D/g, ''),
+        localizacao: destino.localizacao,
+        pais: destino.pais,
+        precoPorDia: destino.precoPorDia,
       })
       return response.data
     } catch (error) {
@@ -19,7 +18,7 @@ class ClienteService {
     }
   }
 
-  async obterTodosClientes() {
+  async obterTodosDestinos() {
     try {
       const response = await axios.get(this.baseUrl)
       return response.data
@@ -28,7 +27,7 @@ class ClienteService {
     }
   }
 
-  async obterClientePorId(id) {
+  async obterDestinoPorId(id) {
     try {
       const response = await axios.get(`${this.baseUrl}/${id}`)
       return response.data
@@ -37,20 +36,19 @@ class ClienteService {
     }
   }
 
-  async atualizarCliente(id, cliente) {
+  async atualizarDestino(id, destino) {
     try {
       await axios.put(`${this.baseUrl}/${id}`, {
-        nome: cliente.nome,
-        email: cliente.email,
-        telefone: cliente.telefone.replace(/\D/g, ''),
-        cpf: cliente.cpf.replace(/\D/g, ''),
+        localizacao: destino.localizacao,
+        pais: destino.pais,
+        precoPorDia: destino.precoPorDia,
       })
     } catch (error) {
       this.handleError(error)
     }
   }
 
-  async excluirCliente(id) {
+  async excluirDestino(id) {
     try {
       await axios.delete(`${this.baseUrl}/${id}`)
     } catch (error) {
@@ -67,4 +65,4 @@ class ClienteService {
   }
 }
 
-export default new ClienteService()
+export default new DestinoService()
