@@ -9,7 +9,7 @@ class DestinoRoutes {
   }
 
   get delete() {
-    return `${this.name}/${this.config.id}`
+    return `${this.name}/delete/${this.config.id}`
   }
 }
-export default DestinoRoutes;
+export default DestinoRoutes

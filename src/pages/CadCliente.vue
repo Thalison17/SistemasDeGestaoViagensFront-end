@@ -29,7 +29,7 @@
               type="email"
               :rules="[
                 (val) => !!val || 'Email é obrigatório',
-                (val) => isValidEmail(val) || 'Email inválido',
+                (val) => isEmail(val) || 'Email inválido',
               ]"
               lazy-rules
               outlined
@@ -59,7 +59,7 @@
               mask="###.###.###-##"
               :rules="[
                 (val) => !!val || 'CPF é obrigatório',
-                (val) => isValidCPF(val) || 'CPF inválido',
+                (val) => isCPF(val) || 'CPF inválido',
               ]"
               lazy-rules
               outlined
@@ -97,16 +97,14 @@
 <script>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
-import { useClienteStore } from '../controller/store/ClienteStore' // Ajuste o caminho se necessário
+import { useClienteStore } from '../controller/store/ClienteStore'
 import Cliente from '../model/Cliente'
 
 export default {
   setup() {
     const $q = useQuasar()
-    const router = useRouter()
     const loading = ref(false)
-    const clienteStore = useClienteStore() // Chame a função para obter a store
+    const clienteStore = useClienteStore()
 
     const formData = ref({
       nome: '',
@@ -115,38 +113,37 @@ export default {
       cpf: '',
     })
 
-    // Validação de email
-    const isValidEmail = (val) => {
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+
+    const isEmail = (val) => {
+      const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
       return emailPattern.test(val)
     }
 
-    // Validação de CPF
-    const isValidCPF = (cpf) => {
-      cpf = cpf.replace(/[^\d]+/g, '')
-      if (cpf.length !== 11) return false
-
-      // Elimina CPFs inválidos conhecidos
-      if (/^(\d)\1{10}$/.test(cpf)) return false
-
-      // Valida 1o dígito
-      let add = 0
-      for (let i = 0; i < 9; i++) {
-        add += parseInt(cpf.charAt(i)) * (10 - i)
+    const isCPF = (val) => {
+      const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/
+      if (!cpfPattern.test(val)) {
+        return 'Digite um CPF válido'
       }
-      let rev = 11 - (add % 11)
-      if (rev === 10 || rev === 11) rev = 0
-      if (rev !== parseInt(cpf.charAt(9))) return false
 
-      // Valida 2o dígito
-      add = 0
-      for (let i = 0; i < 10; i++) {
-        add += parseInt(cpf.charAt(i)) * (11 - i)
+      // validação de CPF
+      let sum
+      let remainder
+      sum = 0
+      if (val === '000.000.000-00' || val === '111.111.111-11' || val === '222.222.222-22' || val === '333.333.333-33' || val === '444.444.444-44' || val === '555.555.555-55' || val === '666.666.666-66' || val === '777.777.777-77' || val === '888.888.888-88' || val === '999.999.999-99') {
+        return 'Digite um CPF válido'
       }
-      rev = 11 - (add % 11)
-      if (rev === 10 || rev === 11) rev = 0
-      if (rev !== parseInt(cpf.charAt(10))) return false
-
+      const cpfNumbers = val.replace(/[^\d]+/g, '')
+      for (let i = 1; i <= 9; i++) {
+        sum = sum + parseInt(cpfNumbers.substring(i - 1, i)) * (11 - i)
+      }
+      remainder = (sum * 10) % 11
+      if ((remainder === 10) || (remainder === 11)) remainder = 0
+      if (remainder !== parseInt(cpfNumbers.substring(9, 10))) return 'Digite um CPF válido'
+      sum = 0
+      for (let i = 1; i <= 10; i++) sum = sum + parseInt(cpfNumbers.substring(i - 1, i)) * (12 - i)
+      remainder = (sum * 10) % 11
+      if ((remainder === 10) || (remainder === 11)) remainder = 0
+      if (remainder !== parseInt(cpfNumbers.substring(10, 11))) return 'Digite um CPF válido'
       return true
     }
 
@@ -170,15 +167,23 @@ export default {
         $q.notify({
           type: 'positive',
           message: 'Cliente cadastrado com sucesso!',
+          caption: `${formData.value.nome}, ${formData.value.cpf}`,
+          position: 'top',
+          timeout: 2500,
+          actions: [{ label: 'Fechar', color: 'white' }],
         })
 
-        // Redireciona para a página apropriada
-        router.push('/')
+        resetForm()
+
       } catch (error) {
         // Trata os erros
         $q.notify({
           type: 'negative',
-          message: error.message || 'Erro ao cadastrar cliente',
+          message: 'Erro ao cadastrar cliente',
+          caption: error.message || 'Ocorreu um erro inesperado',
+          position: 'top',
+          timeout: 3000,
+          actions: [{ label: 'Fechar', color: 'white' }],
         })
       } finally {
         loading.value = false
@@ -199,8 +204,8 @@ export default {
       loading,
       onSubmit,
       resetForm,
-      isValidEmail,
-      isValidCPF,
+      isEmail,
+      isCPF,
     }
   },
 }

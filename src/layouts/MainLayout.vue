@@ -71,10 +71,16 @@ const travelLinks = [
     to: '/destinos', // Navega para a rota '/destinos'
   },
   {
-    title: 'Perfil',
-    caption: 'Meu perfil',
-    icon: 'account_circle',
-    to: '/perfil', // Navega para a rota '/perfil'
+    title: 'Cadastro de Clientes',
+    caption: 'Adicionar novo cliente',
+    icon: 'person_add',
+    to: '/cliente',
+  },
+  {
+    title: 'Cadastro de Destinos',
+    caption: 'Adicionar novo destino',
+    icon: 'add_location',
+    to: '/destino',
   },
   {
     title: 'Ajuda',

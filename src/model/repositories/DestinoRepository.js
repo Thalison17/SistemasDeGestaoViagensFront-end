@@ -1,6 +1,6 @@
 import api from 'src/services/api'
 import Destino from 'src/model/Destino'
-import DestinoRoutes from './apiRoutes/DestinoRoutes'
+import DestinoRoutes from 'src/model/repositories/apiRoutes/DestinoRoute'
 
 export default class DestinoRepository {
   constructor() {
