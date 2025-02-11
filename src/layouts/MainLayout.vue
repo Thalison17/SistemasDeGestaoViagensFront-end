@@ -77,10 +77,22 @@ const travelLinks = [
     to: '/cliente',
   },
   {
+    title: 'Clientes Cadastrados',
+    caption: 'Ver lista de clientes',
+    icon: 'groups',
+    to: '/clientes',
+  },
+  {
     title: 'Cadastro de Destinos',
     caption: 'Adicionar novo destino',
     icon: 'add_location',
     to: '/destino',
+  },
+  {
+    title: 'Destinos Cadastrados',
+    caption: 'Ver lista de destinos',
+    icon: 'travel_explore',
+    to: '/destinos',
   },
   {
     title: 'Ajuda',

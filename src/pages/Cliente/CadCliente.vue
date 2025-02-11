@@ -97,8 +97,8 @@
 <script>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useClienteStore } from '../controller/store/ClienteStore'
-import Cliente from '../model/Cliente'
+import { useClienteStore } from '../../controller/store/ClienteStore'
+import Cliente from '../../model/Cliente'
 
 export default {
   setup() {
@@ -113,9 +113,9 @@ export default {
       cpf: '',
     })
 
-
     const isEmail = (val) => {
-      const emailPattern = /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
+      const emailPattern =
+        /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
       return emailPattern.test(val)
     }
 
@@ -129,7 +129,18 @@ export default {
       let sum
       let remainder
       sum = 0
-      if (val === '000.000.000-00' || val === '111.111.111-11' || val === '222.222.222-22' || val === '333.333.333-33' || val === '444.444.444-44' || val === '555.555.555-55' || val === '666.666.666-66' || val === '777.777.777-77' || val === '888.888.888-88' || val === '999.999.999-99') {
+      if (
+        val === '000.000.000-00' ||
+        val === '111.111.111-11' ||
+        val === '222.222.222-22' ||
+        val === '333.333.333-33' ||
+        val === '444.444.444-44' ||
+        val === '555.555.555-55' ||
+        val === '666.666.666-66' ||
+        val === '777.777.777-77' ||
+        val === '888.888.888-88' ||
+        val === '999.999.999-99'
+      ) {
         return 'Digite um CPF válido'
       }
       const cpfNumbers = val.replace(/[^\d]+/g, '')
@@ -137,12 +148,12 @@ export default {
         sum = sum + parseInt(cpfNumbers.substring(i - 1, i)) * (11 - i)
       }
       remainder = (sum * 10) % 11
-      if ((remainder === 10) || (remainder === 11)) remainder = 0
+      if (remainder === 10 || remainder === 11) remainder = 0
       if (remainder !== parseInt(cpfNumbers.substring(9, 10))) return 'Digite um CPF válido'
       sum = 0
       for (let i = 1; i <= 10; i++) sum = sum + parseInt(cpfNumbers.substring(i - 1, i)) * (12 - i)
       remainder = (sum * 10) % 11
-      if ((remainder === 10) || (remainder === 11)) remainder = 0
+      if (remainder === 10 || remainder === 11) remainder = 0
       if (remainder !== parseInt(cpfNumbers.substring(10, 11))) return 'Digite um CPF válido'
       return true
     }
@@ -174,7 +185,6 @@ export default {
         })
 
         resetForm()
-
       } catch (error) {
         // Trata os erros
         $q.notify({

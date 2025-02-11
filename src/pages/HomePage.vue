@@ -2,7 +2,7 @@
   <q-page class="home-page q-pa-md">
     <!-- Cabeçalho -->
     <div class="text-center q-mb-lg">
-      <h1 class="text-h3 text-weight-bold text-primary">Bem-vindo ao **DECIDIR NOME**</h1>
+      <h1 class="text-h3 text-weight-bold text-primary">Bem-vindo a Gestão de Viagens</h1>
       <p class="text-subtitle1">Gerencie suas viagens de avião de forma fácil e rápida.</p>
     </div>
 

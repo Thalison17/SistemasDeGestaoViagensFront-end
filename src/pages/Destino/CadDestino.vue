@@ -89,8 +89,8 @@
 <script>
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import { useDestinoStore } from '../controller/store/DestinoStore'
-import Destino from '../model/Destino'
+import { useDestinoStore } from '../../controller/store/DestinoStore'
+import Destino from '../../model/Destino'
 
 export default {
   setup() {

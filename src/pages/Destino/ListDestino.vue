@@ -164,7 +164,7 @@
 <script>
 import { ref, onMounted, computed } from 'vue'
 import { useQuasar } from 'quasar'
-import { useDestinoStore } from '../controller/store/DestinoStore'
+import { useDestinoStore } from '../../controller/store/DestinoStore'
 
 export default {
   setup() {

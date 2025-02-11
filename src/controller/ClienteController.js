@@ -7,7 +7,7 @@ export default class ClienteController {
     this.ClienteRepository = new ClienteRepository()
   }
 
-  async getAllCliente() {
+  async getAll() {
     return await this.ClienteRepository.fetchAllCliente()
   }
 
@@ -17,11 +17,11 @@ export default class ClienteController {
   }
   async update(Id, Cliente) {
     if (import.meta.env.VITE_MOCK === 'true') return
-    return await this.clienteRepository.updateCliente(Id, Cliente)
+    return await this.ClienteRepository.updateCliente(Id, Cliente)
   }
 
   async delete(Id) {
     if (import.meta.env.VITE_MOCK === 'true') return
-    return await this.clienteRepository.deleteCliente(Id)
+    return await this.ClienteRepository.deleteCliente(Id)
   }
 }

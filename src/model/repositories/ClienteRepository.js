@@ -19,20 +19,20 @@ export default class ClienteRepository {
     try {
       const baseRoute = this.createBaseRoute()
       const response = await this.apiClient.get(baseRoute)
-      return response.data.value.map(
-        (cliente) =>
-          new Cliente(
-            cliente.clienteId,
-            cliente.nome,
-            cliente.email,
-            cliente.telefone,
-            cliente.cpf,
-            cliente.reservas,
-          ),
+      const clientes = response.data
+      return clientes.map(cliente =>
+        new Cliente(
+          cliente.clienteId,
+          cliente.nome,
+          cliente.email,
+          cliente.telefone,
+          cliente.cpf,
+          cliente.reservas
+        )
       )
     } catch (error) {
       console.error('Erro ao buscar clientes', error)
-      return []
+      throw error
     }
   }
 
@@ -50,12 +50,11 @@ export default class ClienteRepository {
   async updateCliente(Id, form) {
     try {
       const baseRoute = this.createBaseRoute()
-      form.Id = Id
-      const response = await this.apiClient.put(baseRoute, form)
+      const response = await this.apiClient.put(`${baseRoute}/${Id}`, form)
       return response
     } catch (error) {
       console.error('Erro ao atualizar cliente', error)
-      return []
+      throw error
     }
   }
 
