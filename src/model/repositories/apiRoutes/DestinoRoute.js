@@ -8,6 +8,10 @@ class DestinoRoutes {
     return `${this.name}`
   }
 
+  get update() {
+    return `${this.name}/${this.config.id}`
+  }
+
   get delete() {
     return `${this.name}/delete/${this.config.id}`
   }

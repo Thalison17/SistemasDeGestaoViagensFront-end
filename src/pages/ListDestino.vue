@@ -97,6 +97,44 @@
             </template>
           </q-table>
         </q-card>
+        <q-dialog v-model="editDialog">
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">Editar Destino</div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+              <q-input
+                v-model="editForm.localizacao"
+                label="Localização"
+                readonly
+                dense
+                outlined
+              />
+              <q-input
+                v-model="editForm.pais"
+                label="País"
+                readonly
+                dense
+                outlined
+                class="q-mt-md"
+              />
+              <q-input
+                v-model.number="editForm.precoPorDia"
+                label="Preço por Dia"
+                type="number"
+                dense
+                outlined
+                class="q-mt-md"
+              />
+            </q-card-section>
+
+            <q-card-actions align="right">
+              <q-btn flat label="Cancelar" color="primary" v-close-popup />
+              <q-btn flat label="Salvar" color="positive" @click="updateDestino" />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
 
@@ -191,11 +229,15 @@ export default {
       loading.value = true
       try {
         await destinoStore.fetch()
+        console.log('Destinos carregados:', destinoStore.items)
       } catch (error) {
+        console.error('Erro ao carregar destinos:', error)
         $q.notify({
           type: 'negative',
           message: 'Erro ao carregar destinos',
-          caption: error.message,
+          caption: error.message || 'Ocorreu um erro inesperado',
+          position: 'top',
+          timeout: 5000,
         })
       } finally {
         loading.value = false
@@ -204,15 +246,15 @@ export default {
 
     // Filtrar e ordenar destinos
     const filteredDestinos = computed(() => {
-      let destinos = [...destinoStore.items]
+      let destinos = destinoStore.items || []
+      console.log('Destinos no filtro:', destinos) // Debug
 
-      // Aplicar busca
       if (searchText.value) {
         const searchLower = searchText.value.toLowerCase()
         destinos = destinos.filter(
           (destino) =>
-            destino.localizacao.toLowerCase().includes(searchLower) ||
-            destino.pais.toLowerCase().includes(searchLower)
+            destino.localizacao?.toLowerCase().includes(searchLower) ||
+            destino.pais?.toLowerCase().includes(searchLower)
         )
       }
 
@@ -246,8 +288,53 @@ export default {
       searchText.value = ''
     }
 
+    const editDialog = ref(false)
+    const editForm = ref({
+      destinoId: null,
+      localizacao: '',
+      pais: '',
+      precoPorDia: 0
+    })
+
     const editDestino = (destino) => {
-      console.log('Editar destino:', destino)
+      editForm.value = {
+        destinoId: destino.destinoId,
+        localizacao: destino.localizacao,
+        pais: destino.pais,
+        precoPorDia: destino.precoPorDia
+      }
+      editDialog.value = true
+    }
+
+    const updateDestino = async () => {
+      try {
+        loading.value = true
+        const updateData = {
+          destinoId: editForm.value.destinoId,
+          localizacao: editForm.value.localizacao,
+          pais: editForm.value.pais,
+          precoPorDia: Number(editForm.value.precoPorDia)
+        }
+
+        await destinoStore.updateItem(updateData.destinoId, updateData)
+
+        $q.notify({
+          type: 'positive',
+          message: 'Destino atualizado com sucesso!'
+        })
+
+        editDialog.value = false
+        await fetchDestinos() // Recarrega a lista
+      } catch (error) {
+        console.error('Erro ao atualizar destino:', error)
+        $q.notify({
+          type: 'negative',
+          message: 'Erro ao atualizar destino',
+          caption: error.message || 'Ocorreu um erro inesperado'
+        })
+      } finally {
+        loading.value = false
+      }
     }
 
     const confirmDelete = (destino) => {
@@ -282,8 +369,12 @@ export default {
       formatCurrency,
       clearSearch,
       editDestino,
+      editDialog,
+      editForm,
+      updateDestino,
       confirmDelete,
       deleteDestino,
+      destinos: computed(() => destinoStore.items)
     }
   },
 }

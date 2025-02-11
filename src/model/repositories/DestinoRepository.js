@@ -19,18 +19,18 @@ export default class DestinoRepository {
     try {
       const baseRoute = this.createBaseRoute()
       const response = await this.apiClient.get(baseRoute)
-      return response.data.value.map(
-        (destino) =>
-          new Destino(
-            destino.destinoId,
-            destino.localizacao,
-            destino.pais,
-            destino.precoPorDia,
-          ),
+      const destinos = response.data
+      return destinos.map(destino =>
+        new Destino(
+          destino.destinoId,
+          destino.localizacao,
+          destino.pais,
+          destino.precoPorDia
+        )
       )
     } catch (error) {
       console.error('Erro ao buscar destinos', error)
-      return []
+      throw error
     }
   }
 
@@ -45,15 +45,19 @@ export default class DestinoRepository {
     }
   }
 
-  async updateDestino(Id, form) {
+  async updateDestino(id, form) {
     try {
       const baseRoute = this.createBaseRoute()
-      form.Id = Id
-      const response = await this.apiClient.put(baseRoute, form)
+      const response = await this.apiClient.put(`${baseRoute}/${id}`, {
+        destinoId: id,
+        localizacao: form.localizacao,
+        pais: form.pais,
+        precoPorDia: form.precoPorDia
+      })
       return response
     } catch (error) {
-      console.error('Erro ao atualizar destino', error)
-      return []
+      console.error('Repository error updating destino:', error)
+      throw error
     }
   }
 

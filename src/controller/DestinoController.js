@@ -7,7 +7,7 @@ export default class DestinoController {
     this.DestinoRepository = new DestinoRepository()
   }
 
-  async getAllDestino() {
+  async getAll() {
     return await this.DestinoRepository.fetchAllDestino()
   }
 
@@ -16,9 +16,15 @@ export default class DestinoController {
     return await this.DestinoRepository.createDestino(Destino)
   }
 
-  async update(Id, Destino) {
+  async update(id, destino) {
     if (import.meta.env.VITE_MOCK === 'true') return
-    return await this.DestinoRepository.updateDestino(Id, Destino)
+    try {
+      const response = await this.DestinoRepository.updateDestino(id, destino)
+      return response.data
+    } catch (error) {
+      console.error('Controller error updating destino:', error)
+      throw error
+    }
   }
 
   async delete(Id) {
