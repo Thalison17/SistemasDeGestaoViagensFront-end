@@ -7,7 +7,7 @@ export default class ReservaController {
     this.reservaRepository = new ReservaRepository()
   }
 
-  async getAllReservas() {
+  async getAll() {
     return await this.reservaRepository.fetchAllReservas()
   }
 
