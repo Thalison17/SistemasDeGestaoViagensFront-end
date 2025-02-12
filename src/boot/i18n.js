@@ -6,7 +6,11 @@ export default defineBoot(({ app }) => {
   const i18n = createI18n({
     locale: 'en-US',
     globalInjection: true,
+<<<<<<< HEAD
     messages
+=======
+    messages,
+>>>>>>> 2926bb1 (Salvando alterações locais antes de mudar de branch)
   })
 
   // Set i18n instance on app

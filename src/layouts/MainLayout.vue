@@ -50,7 +50,10 @@
 import { ref } from 'vue'
 import aviao from 'src/assets/aviao.png'
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2926bb1 (Salvando alterações locais antes de mudar de branch)
 // Links do menu lateral
 const travelLinks = [
   {
@@ -72,10 +75,35 @@ const travelLinks = [
     to: '/destinos', // Navega para a rota '/destinos'
   },
   {
+<<<<<<< HEAD
     title: 'Perfil',
     caption: 'Meu perfil',
     icon: 'account_circle',
     to: '/perfil', // Navega para a rota '/perfil'
+=======
+    title: 'Cadastro de Clientes',
+    caption: 'Adicionar novo cliente',
+    icon: 'person_add',
+    to: '/cliente',
+  },
+  {
+    title: 'Clientes Cadastrados',
+    caption: 'Ver lista de clientes',
+    icon: 'groups',
+    to: '/clientes',
+  },
+  {
+    title: 'Cadastro de Destinos',
+    caption: 'Adicionar novo destino',
+    icon: 'add_location',
+    to: '/destino',
+  },
+  {
+    title: 'Destinos Cadastrados',
+    caption: 'Ver lista de destinos',
+    icon: 'travel_explore',
+    to: '/destinos',
+>>>>>>> 2926bb1 (Salvando alterações locais antes de mudar de branch)
   },
   {
     title: 'Ajuda',
@@ -83,7 +111,11 @@ const travelLinks = [
     icon: 'help',
     to: '/ajuda', // Navega para a rota '/ajuda'
   },
+<<<<<<< HEAD
 ];
+=======
+]
+>>>>>>> 2926bb1 (Salvando alterações locais antes de mudar de branch)
 
 const leftDrawerOpen = ref(false)
 

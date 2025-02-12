@@ -3,5 +3,9 @@
 
 export default {
   failed: 'Action failed',
+<<<<<<< HEAD
   success: 'Action was successful'
+=======
+  success: 'Action was successful',
+>>>>>>> 2926bb1 (Salvando alterações locais antes de mudar de branch)
 }
