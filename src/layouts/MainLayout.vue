@@ -106,6 +106,18 @@ const travelLinks = [
 >>>>>>> 2926bb1 (Salvando alterações locais antes de mudar de branch)
   },
   {
+    title: 'Cadastro de Reservas',
+    caption: 'Adicionar nova reserva',
+    icon: 'add_box',
+    to: '/reserva',
+  },
+  {
+    title: 'Reservas Cadastradas',
+    caption: 'Ver lista de reservas',
+    icon: 'confirmation_number',
+    to: '/reservas',
+  },
+  {
     title: 'Ajuda',
     caption: 'Suporte e ajuda',
     icon: 'help',

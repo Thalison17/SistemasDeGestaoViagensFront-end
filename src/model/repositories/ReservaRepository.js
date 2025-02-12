@@ -17,50 +17,52 @@ export default class ReservaRepository {
 
   async fetchAllReservas() {
     try {
-      const baseRoute = this.createBaseRoute()
-      const response = await this.apiClient.get(baseRoute)
-      
-      // Se não houver resposta, retorna array vazio
-      if (!response || !response.data) {
-        console.log('Nenhuma reserva encontrada')
-        return []
-      }
+        const baseRoute = this.createBaseRoute()
+        const response = await this.apiClient.get(`${baseRoute}`) 
 
-      // Verifica se a resposta é um array ou objeto
-      const reservasData = Array.isArray(response.data) 
-        ? response.data 
-        : Array.isArray(response.data.value)
-          ? response.data.value
-          : []
-
-      // Se não houver dados, retorna array vazio
-      if (!reservasData.length) {
-        console.log('Nenhuma reserva encontrada')
-        return []
-      }
-
-      return reservasData.map(reserva => {
-        try {
-          return new Reserva(
-            reserva.reservaId,
-            reserva.clienteId,
-            reserva.viagemId,
-            reserva.dataReserva,
-            reserva.metodoPagamento,
-            reserva.custoTotal,
-            reserva.cliente,
-            reserva.viagem,
-            reserva.duracaoDias
-          )
-        } catch (err) {
-          console.error('Erro ao processar reserva:', err)
-          return null
+        if (!response || !response.data) {
+            console.log('Nenhuma reserva encontrada')
+            return []
         }
-      }).filter(reserva => reserva !== null)
 
+        const [reservasData, clientesResponse, destinosResponse] = await Promise.all([
+            response.data,
+            this.apiClient.get('api/cliente'),
+            this.apiClient.get('api/destino')
+        ])
+
+        const clientes = clientesResponse.data.reduce((acc, cliente) => {
+            acc[cliente.clienteId] = cliente
+            return acc
+        }, {})
+
+        const destinos = destinosResponse.data.reduce((acc, destino) => {
+            acc[destino.destinoId] = destino
+            return acc
+        }, {})
+
+        return reservasData.map(reserva => {
+            const cliente = clientes[reserva.clienteId]
+            const destino = destinos[reserva.viagem?.destinoId]
+
+            return new Reserva(
+                reserva.reservaId,
+                reserva.clienteId,
+                reserva.viagemId,
+                reserva.dataReserva,
+                reserva.metodoPagamento,
+                reserva.custoTotal,
+                cliente || { nome: 'N/A' },
+                {
+                    ...reserva.viagem,
+                    destino: destino || { localizacao: 'N/A' }
+                },
+                reserva.duracaoDias
+            )
+        })
     } catch (error) {
-      console.error('Erro ao buscar reservas:', error)
-      return []
+        console.error('Erro ao buscar reservas:', error)
+        throw error
     }
   }
 
@@ -75,15 +77,87 @@ export default class ReservaRepository {
     }
   }
 
+  validateUpdateData(data) {
+    if (!data) throw new Error('Dados inválidos')
+    
+    const requiredFields = [
+      'reservaId',
+      'clienteId',
+      'viagemId',
+      'statusPagamento',
+      'viagem'  // Add viagem as a required field
+    ]
+  
+    const validatedData = {
+      reservaId: parseInt(data.reservaId),
+      clienteId: parseInt(data.clienteId),
+      viagemId: parseInt(data.viagemId),
+      dataReserva: data.dataReserva,
+      statusPagamento: String(data.statusPagamento),
+      metodoPagamento: data.metodoPagamento || '',
+      custoTotal: parseFloat(data.custoTotal) || 0,
+      duracaoDias: parseInt(data.duracaoDias || 0),
+      viagem: data.viagem  // Include the viagem object
+    }
+  
+    requiredFields.forEach(field => {
+      if (validatedData[field] === undefined || validatedData[field] === null) {
+        throw new Error(`Campo obrigatório ausente: ${field}`)
+      }
+    })
+  
+    // Validate viagem object separately
+    if (validatedData.viagem) {
+      const requiredViagemFields = ['id', 'destinoId', 'status', 'dataPartida', 'dataRetorno']
+      requiredViagemFields.forEach(field => {
+        if (!validatedData.viagem[field]) {
+          throw new Error(`Campo obrigatório ausente na viagem: ${field}`)
+        }
+      })
+    }
+  
+    return validatedData
+  }
+
   async updateReserva(id, form) {
     try {
       const baseRoute = this.createBaseRoute()
-      form.reservaId = id
-      const response = await this.apiClient.put(baseRoute, form)
-      return response
+      
+      // Validate and format the data
+      const validatedData = this.validateUpdateData(form)
+      
+      console.log('Enviando requisição:', {
+        url: `${baseRoute}/${id}`,
+        data: validatedData
+      })
+  
+      const response = await this.apiClient.put(`${baseRoute}/${id}`, validatedData)
+      
+      console.log('Resposta do servidor:', response) // Debug log
+  
+      // Check if response exists
+      if (!response) {
+        throw new Error('Não houve resposta do servidor')
+      }
+  
+      // Return the response data or a success message
+      return response.data || { success: true, message: 'Reserva atualizada com sucesso' }
+  
     } catch (error) {
-      console.error('Erro ao atualizar reserva', error)
-      return []
+      console.error('Detalhes do erro:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      })
+  
+      // Throw a more specific error
+      if (error.response?.status === 400) {
+        throw new Error('Dados inválidos para atualização')
+      } else if (error.response?.status === 404) {
+        throw new Error('Reserva não encontrada')
+      } else {
+        throw new Error(error.response?.data?.message || error.message || 'Erro ao atualizar reserva')
+      }
     }
   }
 

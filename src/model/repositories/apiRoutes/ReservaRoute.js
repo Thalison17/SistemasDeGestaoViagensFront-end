@@ -8,6 +8,10 @@ class ReservaRoutes {
     return `${this.name}`
   }
 
+  get update() {
+    return `${this.name}/${this.config.id}`
+  }
+
   get delete() {
     return `${this.name}/${this.config.id}`
   }

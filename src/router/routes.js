@@ -10,7 +10,8 @@ const routes = [
       { path: '/destino', name: 'destino', component: () => import('pages/Destino/CadDestino.vue') },
       { path: '/destinos', name: 'destinos', component: () => import('pages/Destino/ListDestino.vue') },
       { path: '/reserva', name: 'reserva', component: () => import('pages/Reserva/CadReserva.vue') },
-      { path: '/reservas', name: 'reservas', component: () => import('pages/Reserva/ListReservas.vue')}
+      { path: '/reservas', name: 'reservas', component: () => import('pages/Reserva/ListReserva.vue') },
+      { path: '/viagem', name: 'viagem', component: () => import('pages/ListViagem.vue') },
     ],
   },
 
