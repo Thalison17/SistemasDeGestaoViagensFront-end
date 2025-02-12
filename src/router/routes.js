@@ -4,19 +4,21 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '/', name: 'home', component: () => import('pages/HomePage.vue') },
-      { path: '/reservas', name: '/reservas', component: () => import('pages/ReservasPage.vue') },
-      { path: '/destinos', name: 'destinos', component: () => import('pages/DestinoPage.vue')},
-      { path: '/destinos/:id', name: 'destino-detalhes', component: () => import('pages/DestinoDetalhes.vue')},
-    ]
+      { path: '/reservas', name: 'reservas', component: () => import('pages/ReservasPage.vue') },
+      { path: '/reservas/:id', name: 'reserva-detalhes', component: () => import('pages/ReservaDetalhesPage.vue') },
+      { path: '/cliente', name: 'cliente', component: () => import('src/pages/Cliente/CadCliente.vue') },
+      { path: '/clientes', name: 'clientes', component: () => import('src/pages/Cliente/ListCliente.vue') },
+      { path: '/destino', name: 'destino', component: () => import('pages/Destino/CadDestino.vue') },
+      { path: '/destinos', name: 'destinos', component: () => import('pages/Destino/ListDestino.vue') },
+    ],
   },
-  { path: '/cad', name: 'cad', component: () => import('pages/CadCliente.vue') },
 
   // Always leave this as last one,
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
-  }
+    component: () => import('pages/ErrorNotFound.vue'),
+  },
 ]
 
 export default routes
