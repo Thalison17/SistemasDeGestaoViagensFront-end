@@ -95,6 +95,18 @@ const travelLinks = [
     to: '/destinos',
   },
   {
+    title: 'Cadastro de Reservas',
+    caption: 'Adicionar nova reserva',
+    icon: 'add_box',
+    to: '/reserva',
+  },
+  {
+    title: 'Reservas Cadastradas',
+    caption: 'Ver lista de reservas',
+    icon: 'confirmation_number',
+    to: '/reservas',
+  },
+  {
     title: 'Ajuda',
     caption: 'Suporte e ajuda',
     icon: 'help',
